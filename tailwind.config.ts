@@ -12,6 +12,10 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        textfont: ['var(--font-soucre-code-pro)', 'var(--font-jet-brains-mono)'],
+        fancyfont: ['var(--font-jet-brains-mono)', 'var(--font-soucre-code-pro)']
+      }
     },
   },
   plugins: [],
