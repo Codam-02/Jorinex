@@ -6,7 +6,7 @@ import ProgressBar from "./ProgressBar";
 
 export default function ParameterSelector({updateObject, setMode}: any) {
 
-  const stages = ['Type', 'Topic', 'Info']
+  const stages = ['Type', 'Topic', 'Reply', 'Formality', 'Info']
   const [selectedStage, setSelectedStage] = useState(0);
   
   const handleClickNext = () => {
@@ -27,21 +27,23 @@ export default function ParameterSelector({updateObject, setMode}: any) {
     setSelectedStage(selectedStage - 1);
   };
 
-  const options = [['Email', 'Text/Direct message'], ['Cold outreach', 'Reply', 'Congratulations', 'Job offer', 'Partnership proposal', 'Feedback request', 'Event invitation', 'Apology'],['This', 'Is', 'A', 'Test']]
-  const questions = ["What type of message are you looking to generate?", "What's the topic of your message?", "Do you like this test?"]
-  const hooks = [useState(null), useState(null), useState(null)];
+  const options = [['Email', 'Text/Direct message'], ['Standard reply', 'Cold outreach', 'Congratulations', 'Job offer', 'Partnership proposal', 'Feedback request', 'Event invitation', 'Apology'], ['Yes', 'No'], ['Low', 'Moderate', 'High'], ['This', 'Is', 'A', 'Test']]
+  const questions = ["What type of message are you looking to generate?", "What's the broad topic of your message?", "Are you replying to a message?", "What do you want the level of formality to be?", "Do you like this test?"]
+  const hooks = Array.from({ length: stages.length }, () => useState(null));
 
   return (
     selectedStage < stages.length ?
-    <div className="relative w-[350px] bg-gray-950 p-5 rounded-lg h-[556px]">
-      <div className="h-fit">
+    <div className="relative w-fit bg-gray-950 p-5 rounded-lg h-[556px]">
+      <div className="h-fit justify-center">
       <ProgressBar options={stages} selectHook={[selectedStage, setSelectedStage]} />
-      <h3 className="text-lg text-gray-300 mt-4 text-center font-bold font-textfont">{questions[selectedStage]}</h3>
+      <div className="flex flex-col items-center">
+      <h3 className="w-[450px] text-lg text-gray-300 mt-6 text-center font-bold font-textfont">{questions[selectedStage]}</h3>
+      </div>
       </div>
       <div className="h-[68%] mt-4 flex flex-col justify-center items-center">
         <HamburgerMenu options={options.at(selectedStage)} selectHook={hooks[selectedStage]} />
       </div>
-      <div className="absolute bottom-4 flex justify-center mt-4 gap-[185px]">
+      <div className="absolute w-[92.5%] bottom-4 flex justify-between mt-4">
           <button className={selectedStage == 0 ? "bg-gray-900 block rounded-lg px-4 py-2 text-sm font-medium text-gray-300 text-center font-textfont" : "bg-blue-700 block rounded-lg px-4 py-2 text-sm font-medium text-gray-200 hover:bg-gray-100 hover:text-gray-700 text-center font-textfont"} onClick={handleClickBack} disabled={selectedStage == 0}>Back</button>
           <button className={selectedStage == stages.length|| hooks[selectedStage][0] == null ? "bg-gray-900 block rounded-lg px-4 py-2 text-sm font-medium text-gray-300 text-center font-textfont" : "bg-blue-700 block rounded-lg px-4 py-2 text-sm font-medium text-gray-200 hover:bg-gray-100 hover:text-gray-700 text-center font-textfont"} onClick={handleClickNext} disabled={selectedStage == stages.length || hooks[selectedStage][0] == null}>Next</button>
       </div>
