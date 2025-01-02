@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import HamburgerMenu from "./HamburgerMenu";
 import ProgressBar from "./ProgressBar";
+import InputGroup from "./InputGroup";
 
 export default function ParameterSelector({updateObject, setMode}: any) {
 
-  const stages = ['Type', 'Topic', 'Reply', 'Formality', 'Info']
+  const stages = ['Type', 'Topic', 'Formality', 'Info']
   const [selectedStage, setSelectedStage] = useState(0);
   
   const handleClickNext = () => {
@@ -27,9 +28,11 @@ export default function ParameterSelector({updateObject, setMode}: any) {
     setSelectedStage(selectedStage - 1);
   };
 
-  const options = [['Email', 'Text/Direct message'], ['Standard reply', 'Cold outreach', 'Congratulations', 'Job offer', 'Partnership proposal', 'Feedback request', 'Event invitation', 'Apology'], ['Yes', 'No'], ['Low', 'Moderate', 'High'], ['This', 'Is', 'A', 'Test']]
-  const questions = ["What type of message are you looking to generate?", "What's the broad topic of your message?", "Are you replying to a message?", "What do you want the level of formality to be?", "Do you like this test?"]
-  const hooks = Array.from({ length: stages.length }, () => useState(null));
+  const options = [['Email', 'Text/Direct message'], ['Standard reply', 'Cold outreach', 'Congratulations', 'Job offer', 'Partnership proposal', 'Feedback request', 'Event invitation', 'Apology'], ['Low', 'Moderate', 'High'], ['This', 'Is', 'A', 'Test']]
+  const questions = ["What type of message are you looking to generate?", "What's the broad topic of your message?", "What do you want the level of formality to be?", "Provide addtional info"]
+  const hooks = Array.from({ length: stages.length - 1}, () => useState(null));
+  const input1Hook = useState('');
+  const input2Hook = useState('');
 
   return (
     selectedStage < stages.length ?
@@ -40,6 +43,19 @@ export default function ParameterSelector({updateObject, setMode}: any) {
       <h3 className="w-[450px] text-lg text-gray-300 mt-6 text-center font-bold font-textfont">{questions[selectedStage]}</h3>
       </div>
       </div>
+      {
+      selectedStage == stages.length - 1 ?
+      <>
+      <div className="h-[68%] mt-4 flex flex-col justify-center items-center">
+        <InputGroup updateObject={updateObject} hook1={input1Hook} hook2={input2Hook}/>
+      </div>
+      <div className="absolute w-[92.5%] bottom-4 flex justify-between mt-4">
+          <button className={"bg-blue-700 block rounded-lg px-4 py-2 text-sm font-medium text-gray-200 hover:bg-gray-100 hover:text-gray-700 text-center font-textfont"} onClick={handleClickBack}>Back</button>
+          <button className={"bg-blue-700 block rounded-lg px-4 py-2 text-sm font-medium text-gray-200 hover:bg-gray-100 hover:text-gray-700 text-center font-textfont"} onClick={handleClickNext}>Next</button>
+      </div>
+      </>
+      :
+      <>
       <div className="h-[68%] mt-4 flex flex-col justify-center items-center">
         <HamburgerMenu options={options.at(selectedStage)} selectHook={hooks[selectedStage]} />
       </div>
@@ -47,6 +63,8 @@ export default function ParameterSelector({updateObject, setMode}: any) {
           <button className={selectedStage == 0 ? "bg-gray-900 block rounded-lg px-4 py-2 text-sm font-medium text-gray-300 text-center font-textfont" : "bg-blue-700 block rounded-lg px-4 py-2 text-sm font-medium text-gray-200 hover:bg-gray-100 hover:text-gray-700 text-center font-textfont"} onClick={handleClickBack} disabled={selectedStage == 0}>Back</button>
           <button className={selectedStage == stages.length|| hooks[selectedStage][0] == null ? "bg-gray-900 block rounded-lg px-4 py-2 text-sm font-medium text-gray-300 text-center font-textfont" : "bg-blue-700 block rounded-lg px-4 py-2 text-sm font-medium text-gray-200 hover:bg-gray-100 hover:text-gray-700 text-center font-textfont"} onClick={handleClickNext} disabled={selectedStage == stages.length || hooks[selectedStage][0] == null}>Next</button>
       </div>
+      </>
+      }
     </div>
     :
     <div className="bg-gray-950 p-5 rounded-lg h-fit flex flex-col justify-center items-center gap-14 w-[450px]">
