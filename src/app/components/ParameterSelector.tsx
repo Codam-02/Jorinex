@@ -29,7 +29,7 @@ export default function ParameterSelector({updateObject, setMode}: any) {
   };
 
   const options = [['Email', 'Text/Direct message'], ['Standard reply', 'Cold outreach', 'Congratulations', 'Job offer', 'Partnership proposal', 'Feedback request', 'Event invitation', 'Apology'], ['Low', 'Moderate', 'High'], ['This', 'Is', 'A', 'Test']]
-  const questions = ["What type of message are you looking to generate?", "What's the broad topic of your message?", "What do you want the level of formality to be?", "Provide addtional info"]
+  const questions = ["What type of message are you looking to generate?", "What's the broad topic of your message?", "What do you want the level of formality to be?", "Provide additional info"]
   const hooks = Array.from({ length: stages.length - 1}, () => useState(null));
   const input1Hook = useState('');
   const input2Hook = useState('');

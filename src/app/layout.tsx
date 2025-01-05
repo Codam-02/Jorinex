@@ -33,9 +33,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="m-0 p-0">
       <body
-        className={`${sourceCodePro.variable} ${jetBrainsMono.variable}`}
+        className={`${sourceCodePro.variable} ${jetBrainsMono.variable} overflow-hidden m-0 p-0`}
       >
         {children}
       </body>
