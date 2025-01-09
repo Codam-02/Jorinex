@@ -25,8 +25,8 @@ export default function Home() {
       <Sidebar setMode={setMode}/>
       </div>
 
-      <div className="w-[82%] bg-gray-800 h-[screen]">
-        <div className="w-full h-full px-6 py-5 flex justify-center items-center">
+      <div className="w-[82%] bg-gray-800 h-screen">
+        <div className="w-full h-screen px-6 py-5 flex justify-center items-center">
         {mode == 'home' ? <NewChatComponent setMode={setMode}/> : mode == 'new chat' ? <ParameterSelector updateObject={updateObject} setMode={setMode}/> : <ChatComponent firstPrompt={null} lastMessages={null} />}
         </div>
       </div>

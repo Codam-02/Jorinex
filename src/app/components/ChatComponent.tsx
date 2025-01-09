@@ -4,7 +4,9 @@ import { useChat } from 'ai/react';
 import { useEffect, useRef } from 'react';
 
 export default function ChatComponent({firstPrompt, lastMessages}: any) {
-  const { messages, input, handleSubmit, handleInputChange, isLoading } = useChat();
+  const { messages, input, handleSubmit, handleInputChange, isLoading } = useChat({
+    api: '/api'
+  });
   const chatContainer = useRef<HTMLDivElement>(null);
 
   const scroll = () => {
@@ -20,12 +22,10 @@ export default function ChatComponent({firstPrompt, lastMessages}: any) {
 
   const renderResponse = () => {
     return (
-      <div ref={chatContainer} className='w-[100%] h-[93%] pb-4 bg-gray-800 rounded-lg'>
+      <div ref={chatContainer} className='w-[100%] h-full mb-4 rounded-lg overflow-y-auto scrollbar-thin pr-2'>
         {messages.map((m, index) => (
-          <div key={m.id}>
-            <div>
-              <p className='text-gray-200'>{m.content}</p>
-            </div>
+          <div key={m.id} className={index % 2 == 0 ? 'w-full flex justify-start h-fit' : 'w-full flex justify-end h-fit'}>
+            <p className='text-gray-200 max-w-[470px] bg-blue-600 rounded-xl p-2 break-words'>{m.content}</p>
           </div>
         ))}
       </div>
@@ -41,7 +41,7 @@ export default function ChatComponent({firstPrompt, lastMessages}: any) {
   return (
     <div className='w-full h-full bg-gray-900 rounded-lg p-6 relative flex flex-col justify-between'>
       {renderResponse()}
-      <form onSubmit={handleSubmit} className='w-[100%] flex justify-center items-center h-[7%]'>
+      <form onSubmit={handleSubmit} className='w-[100%] flex justify-center items-center h-[8%]'>
         <input
           value={input}
           placeholder="Send a message..."
