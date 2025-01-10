@@ -5,10 +5,15 @@ import HamburgerMenu from "./HamburgerMenu";
 import ProgressBar from "./ProgressBar";
 import InputGroup from "./InputGroup";
 
-export default function ParameterSelector({updateObject, setMode}: any) {
+export default function ParameterSelector({updateObject, setData, setMode, setNewChat}: any) {
 
   const stages = ['Type', 'Topic', 'Formality', 'Info']
   const [selectedStage, setSelectedStage] = useState(0);
+
+  useEffect(() => {
+    setData({});
+    setNewChat(true);
+  }, []);
   
   const handleClickNext = () => {
     hooks.forEach((item, index) => {
@@ -28,7 +33,7 @@ export default function ParameterSelector({updateObject, setMode}: any) {
     setSelectedStage(selectedStage - 1);
   };
 
-  const options = [['Email', 'Text/Direct message'], ['Standard reply', 'Cold outreach', 'Congratulations', 'Job offer', 'Partnership proposal', 'Feedback request', 'Event invitation', 'Apology'], ['Low', 'Moderate', 'High'], ['This', 'Is', 'A', 'Test']]
+  const options = [['Email', 'Text/Direct message'], ['Standard reply', 'Cold outreach', 'Congratulations', 'Job offer', 'Partnership proposal', 'Feedback request', 'Event invitation', 'Apology'], ['Low', 'Moderate', 'High']]
   const questions = ["What type of message are you looking to generate?", "What's the broad topic of your message?", "What do you want the level of formality to be?", "Provide additional info"]
   const hooks = Array.from({ length: stages.length - 1}, () => useState(null));
   const input1Hook = useState('');
@@ -60,7 +65,7 @@ export default function ParameterSelector({updateObject, setMode}: any) {
         <HamburgerMenu options={options.at(selectedStage)} selectHook={hooks[selectedStage]} />
       </div>
       <div className="absolute w-[92.5%] bottom-4 flex justify-between mt-4">
-          <button className={selectedStage == 0 ? "bg-gray-900 block rounded-lg px-4 py-2 text-sm font-medium text-gray-300 text-center font-textfont" : "bg-blue-700 block rounded-lg px-4 py-2 text-sm font-medium text-gray-200 hover:bg-gray-100 hover:text-gray-700 text-center font-textfont"} onClick={handleClickBack} disabled={selectedStage == 0}>Back</button>
+          <button className={"bg-blue-700 block rounded-lg px-4 py-2 text-sm font-medium text-gray-200 hover:bg-gray-100 hover:text-gray-700 text-center font-textfont"} onClick={selectedStage == 0 ? ()=>{setMode('home')} : handleClickBack}>Back</button>
           <button className={selectedStage == stages.length|| hooks[selectedStage][0] == null ? "bg-gray-900 block rounded-lg px-4 py-2 text-sm font-medium text-gray-300 text-center font-textfont" : "bg-blue-700 block rounded-lg px-4 py-2 text-sm font-medium text-gray-200 hover:bg-gray-100 hover:text-gray-700 text-center font-textfont"} onClick={handleClickNext} disabled={selectedStage == stages.length || hooks[selectedStage][0] == null}>Next</button>
       </div>
       </>

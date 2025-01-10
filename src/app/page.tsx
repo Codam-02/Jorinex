@@ -9,8 +9,8 @@ import { useState } from "react";
 
 export default function Home() {
   const [data, setData] = useState({});
-
-  const [mode, setMode] = useState('home')
+  const [mode, setMode] = useState('home');
+  const [newChat, setNewChat] = useState(false);
 
   const updateObject = (key: number, value: string) => {
     setData((prevData: object) => ({
@@ -27,7 +27,7 @@ export default function Home() {
 
       <div className="w-[82%] bg-gray-800 h-screen">
         <div className="w-full h-screen px-6 py-5 flex justify-center items-center">
-        {mode == 'home' ? <NewChatComponent setMode={setMode}/> : mode == 'new chat' ? <ParameterSelector updateObject={updateObject} setMode={setMode}/> : <ChatComponent firstPrompt={null} lastMessages={null} />}
+        {mode == 'home' ? <NewChatComponent setMode={setMode}/> : mode == 'new chat' ? <ParameterSelector updateObject={updateObject} setData={setData} setMode={setMode} setNewChat={setNewChat}/> : newChat ? <ChatComponent firstPrompt={data} lastMessages={null} /> : <ChatComponent firstPrompt={null} lastMessages={null} />}
         </div>
       </div>
     </div>
