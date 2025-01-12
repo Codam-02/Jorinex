@@ -11,7 +11,7 @@ export default function ParameterSelector({updateObject, setData, setMode, setNe
   const [selectedStage, setSelectedStage] = useState(0);
 
   useEffect(() => {
-    setData({});
+    setData({3:'', 4:''});
     setNewChat(true);
   }, []);
   

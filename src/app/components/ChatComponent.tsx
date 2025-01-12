@@ -4,10 +4,17 @@ import { useChat } from 'ai/react';
 import { useEffect, useRef } from 'react';
 
 export default function ChatComponent({firstPrompt, lastMessages}: any) {
-  const { messages, input, handleSubmit, handleInputChange, isLoading } = useChat({
+  const { messages, input, handleSubmit, handleInputChange, setInput, isLoading } = useChat({
     api: '/api'
   });
   const chatContainer = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const triggerSubmit = () => {
+    if (formRef.current) {
+      formRef.current.requestSubmit();
+    }
+  };
 
   const scroll = () => {
     const { offsetHeight, scrollHeight, scrollTop } = chatContainer.current as HTMLDivElement
@@ -33,7 +40,14 @@ export default function ChatComponent({firstPrompt, lastMessages}: any) {
   }
   
   //handle new chat creation
-
+  useEffect(() => {
+    if (firstPrompt) {
+      setInput(firstPrompt);
+      setTimeout(() => {
+        triggerSubmit();          
+      }, 50)
+    }
+  }, []);
 
   //handle retrieved chat
   
@@ -41,9 +55,9 @@ export default function ChatComponent({firstPrompt, lastMessages}: any) {
   return (
     <div className='w-full h-full bg-gray-900 rounded-lg p-6 relative flex flex-col justify-between'>
       {renderResponse()}
-      <form onSubmit={handleSubmit} className='w-[100%] flex justify-center items-center h-[8%]'>
+      <form ref={formRef} onSubmit={handleSubmit} className='w-[100%] flex justify-center items-center h-[8%]'>
         <input
-          value={input}
+          value={messages.length > 0 ? input : ''}
           placeholder="Send a message..."
           onChange={handleInputChange}
           disabled={isLoading}
