@@ -5,7 +5,6 @@ import { useEffect, useRef } from 'react';
 
 export default function ChatComponent({firstPrompt, lastMessages}: any) {
   const { messages, input, handleSubmit, handleInputChange, setInput, isLoading } = useChat({
-    api: '/api'
   });
   const chatContainer = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -29,10 +28,14 @@ export default function ChatComponent({firstPrompt, lastMessages}: any) {
 
   const renderResponse = () => {
     return (
-      <div ref={chatContainer} className='w-[100%] h-full mb-4 rounded-lg overflow-y-auto scrollbar-thin pr-2'>
+      <div ref={chatContainer} className='w-[100%] h-full mb-4 rounded-lg overflow-y-auto scrollbar-thin pr-2 flex flex-col gap-5'>
         {messages.slice(1).map((m, index) => (
           <div key={m.id} className={index % 2 == 0 ? 'w-full flex justify-start h-fit' : 'w-full flex justify-end h-fit'}>
-            <p className='text-gray-200 max-w-[470px] bg-blue-600 rounded-xl p-2 break-words'>{m.content}</p>
+            <p
+              className='text-gray-200 max-w-[470px] bg-blue-800 rounded-xl p-3 border border-blue-900 shadow-sm whitespace-pre-wrap font-mono'
+            > 
+              {m.content}
+            </p>
           </div>
         ))}
       </div>
@@ -57,6 +60,7 @@ export default function ChatComponent({firstPrompt, lastMessages}: any) {
       {renderResponse()}
       <form ref={formRef} onSubmit={handleSubmit} className='w-[100%] flex justify-center items-center h-[8%]'>
         <input
+          name='prompt'
           value={messages.length > 0 ? input : ''}
           placeholder="Send a message..."
           onChange={handleInputChange}
