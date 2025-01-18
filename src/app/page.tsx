@@ -6,15 +6,26 @@ import NewChatComponent from "./components/NewChatComponent";
 import ParameterSelector from "./components/ParameterSelector";
 import Sidebar from "./components/Sidebar";
 import { useState } from "react";
+import { SignIn, useUser } from '@clerk/nextjs';
+import { dark } from '@clerk/themes'
 
 type DataType = {
   [key: number]: any;
 };
 
 export default function Home() {
+  const { user } = useUser();
   const [data, setData] = useState<DataType>({3:'', 4:''});
   const [mode, setMode] = useState('home');
   const [newChat, setNewChat] = useState(false);
+
+  if (!user) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gray-800">
+        <SignIn routing="hash" appearance={{baseTheme: dark}}/>
+      </div>
+    )
+  }
 
   const updateObject = (key: number, value: string) => {
     setData((prevData: object) => ({
