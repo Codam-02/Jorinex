@@ -2,7 +2,7 @@
 
 export default function InputGroup({hook1, hook2, updateObject}: any) {
     
-    const inputs:any = [["If you're replying to a message, paste the message below (recomended)", "Paste message to reply to"], ["Add any extra info (recomended)", "e.g. recipient's name, specific content..."]];
+    const inputs:any = [["If you're replying to a message, paste the message below (recomended)", "Paste message to reply to"], ["Add any extra instructions (recomended)", "e.g. recipient's name, specific content..."]];
     const [inputValue1, setInputValue1] = hook1;
     const [inputValue2, setInputValue2] = hook2;
 
