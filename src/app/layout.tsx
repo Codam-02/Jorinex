@@ -2,22 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, JetBrains_Mono, Source_Code_Pro } from "next/font/google";
 import {
   ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
 } from '@clerk/nextjs'
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jet-brains-mono",
@@ -45,12 +31,6 @@ export default function RootLayout({
         <body
           className={`${sourceCodePro.variable} ${jetBrainsMono.variable} overflow-hidden m-0 p-0`}
         >
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
           {children}
         </body>
       </html>
