@@ -15,7 +15,6 @@ type DataType = {
 
 export default function Home() {
   const { isLoaded, isSignedIn, user } = useUser();
-  const { userId, sessionId, getToken } = useAuth()
   const [data, setData] = useState<DataType>({3:'', 4:''});
   const [mode, setMode] = useState('home');
   const [newChat, setNewChat] = useState(false);
