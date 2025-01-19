@@ -2,12 +2,18 @@
 
 import { useChat } from 'ai/react';
 import { useEffect, useRef } from 'react';
+import { useAuth } from '@clerk/nextjs'
 
 export default function ChatComponent({firstPrompt, lastMessages}: any) {
   const { messages, input, handleSubmit, handleInputChange, setInput, isLoading } = useChat({
   });
   const chatContainer = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const { isLoaded, userId } = useAuth();
+
+  if (!isLoaded || !userId) {
+    return null
+  };
 
   const triggerSubmit = () => {
     if (formRef.current) {
@@ -58,7 +64,16 @@ export default function ChatComponent({firstPrompt, lastMessages}: any) {
   return (
     <div className='w-full h-full bg-gray-900 rounded-lg p-6 relative flex flex-col justify-between'>
       {renderResponse()}
-      <form ref={formRef} onSubmit={handleSubmit} className='w-[100%] flex justify-center items-center h-[8%]'>
+      <form 
+        ref={formRef} 
+        onSubmit={event => {
+          handleSubmit(event, {
+            body: {
+              user_id: userId,
+            },
+          });
+        }}
+        className='w-[100%] flex justify-center items-center h-[8%]'>
         <input
           name='prompt'
           value={messages.length > 0 ? input : ''}
