@@ -6,18 +6,18 @@ import { useAuth } from '@clerk/nextjs'
 import { postMessages } from '../actions';
 
 export default function ChatComponent({firstPrompt, lastMessages, chatId}: { firstPrompt: string | null; lastMessages: Message[] | null; chatId: number }) {
+  const { isLoaded, userId } = useAuth();
   const { messages, input, handleSubmit, handleInputChange, setInput, isLoading } = useChat({
     onFinish: () => {
       setTimeout(() => {
         if (userId) {
-          postMessages(userId, chatId,messages);
+          postMessages(userId, chatId, messages);
         }
       }, 50);
     }
   });
   const chatContainer = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const { isLoaded, userId } = useAuth();
 
   if (!isLoaded || !userId) {
     return null
@@ -56,7 +56,6 @@ export default function ChatComponent({firstPrompt, lastMessages, chatId}: { fir
     ) 
   }
   
-  //handle new chat creation
   useEffect(() => {
     if (firstPrompt) {
       setInput(firstPrompt);
@@ -64,9 +63,9 @@ export default function ChatComponent({firstPrompt, lastMessages, chatId}: { fir
         triggerSubmit();          
       }, 50)
     }
+    //handle retrieved chat
   }, []);
 
-  //handle retrieved chat
   
 
   return (
@@ -78,7 +77,6 @@ export default function ChatComponent({firstPrompt, lastMessages, chatId}: { fir
           handleSubmit(event, {
             body: {
               user_id: userId,
-              chat_id: chatId
             },
           });
         }}
