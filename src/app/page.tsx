@@ -5,15 +5,10 @@ import ChatComponent from "./components/ChatComponent";
 import NewChatComponent from "./components/NewChatComponent";
 import ParameterSelector from "./components/ParameterSelector";
 import Sidebar from "./components/Sidebar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SignIn, useUser, useAuth } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
-import { Redis } from "@upstash/redis";
-
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
-})
+import { fetchChats } from "./actions";
 
 type DataType = {
   [key: number]: any;
@@ -21,9 +16,22 @@ type DataType = {
 
 export default function Home() {
   const { isLoaded, isSignedIn, user } = useUser();
+  const { userId } = useAuth();
   const [data, setData] = useState<DataType>({3:'', 4:''});
   const [mode, setMode] = useState('home');
   const [newChat, setNewChat] = useState(false);
+  const [chats, setChats] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchData = async (user_Id: string) => {
+      const value = await fetchChats(user_Id);
+      return value;
+    }
+    if (userId) {
+      const value = fetchData(userId);
+      setChats(value);
+    }
+  }, [user]);
 
   if (!isLoaded || !isSignedIn || !user) {
     return (
@@ -31,7 +39,7 @@ export default function Home() {
         <SignIn routing="hash" appearance={{baseTheme: dark}}/>
       </div>
     )
-  }
+  };
 
   const updateObject = (key: number, value: string) => {
     setData((prevData: object) => ({
