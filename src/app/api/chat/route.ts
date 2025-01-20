@@ -7,8 +7,10 @@ import { waitUntil } from '@vercel/functions';
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
+const redis = Redis.fromEnv();
+
 const ratelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
+  redis: redis,
   limiter: Ratelimit.slidingWindow(3, "86400 s"),
   prefix: "@upstash/ratelimit",
   analytics: true
@@ -16,6 +18,7 @@ const ratelimit = new Ratelimit({
 
 export async function POST(req: Request) {
   const { messages, user_id } = await req.json();
+
   const identifier = user_id;
   const { success, limit, remaining, pending } = await ratelimit.limit(identifier);
   const response = {
