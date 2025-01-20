@@ -1,11 +1,19 @@
 'use client';
 
-import { useChat } from 'ai/react';
+import { Message, useChat } from 'ai/react';
 import { useEffect, useRef } from 'react';
 import { useAuth } from '@clerk/nextjs'
+import { postMessages } from '../actions';
 
-export default function ChatComponent({firstPrompt, lastMessages}: any) {
+export default function ChatComponent({firstPrompt, lastMessages, chatId}: { firstPrompt: string | null; lastMessages: Message[] | null; chatId: number }) {
   const { messages, input, handleSubmit, handleInputChange, setInput, isLoading } = useChat({
+    onFinish: () => {
+      setTimeout(() => {
+        if (userId) {
+          postMessages(userId, chatId,messages);
+        }
+      }, 50);
+    }
   });
   const chatContainer = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -70,6 +78,7 @@ export default function ChatComponent({firstPrompt, lastMessages}: any) {
           handleSubmit(event, {
             body: {
               user_id: userId,
+              chat_id: chatId
             },
           });
         }}
