@@ -1,8 +1,34 @@
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
+import { waitUntil } from '@vercel/functions';
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(3, "86400 s"),
+  prefix: "@upstash/ratelimit",
+  analytics: true
+});
 
 export async function POST(req: Request) {
   const { messages, user_id } = await req.json();
+  const identifier = user_id;
+  const { success, limit, remaining, pending } = await ratelimit.limit(identifier);
+  const response = {
+    success: success,
+    limit: limit, 
+    remaining: remaining
+  }
+
+  waitUntil(pending);
+    
+  if (!success) {
+    return new Response(JSON.stringify(response), { status: 429 });
+  };
 
   const result = streamText({
     model: openai('gpt-4o'),
