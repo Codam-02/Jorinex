@@ -7,7 +7,13 @@ import ParameterSelector from "./components/ParameterSelector";
 import Sidebar from "./components/Sidebar";
 import { useState } from "react";
 import { SignIn, useUser, useAuth } from '@clerk/nextjs';
-import { dark } from '@clerk/themes'
+import { dark } from '@clerk/themes';
+import { Redis } from "@upstash/redis";
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+})
 
 type DataType = {
   [key: number]: any;
