@@ -1,7 +1,7 @@
 'use client';
 
 import { Message, useChat } from 'ai/react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@clerk/nextjs'
 import { postMessages } from '../actions';
 
@@ -9,15 +9,14 @@ export default function ChatComponent({firstPrompt, lastMessages, chatId}: { fir
   const { isLoaded, userId } = useAuth();
   const { messages, input, handleSubmit, handleInputChange, setInput, isLoading } = useChat({
     onFinish: () => {
-      setTimeout(() => {
-        if (userId) {
-          postMessages(userId, chatId, messages);
-        }
-      }, 50);
+      if (userId) {
+        postMessages(userId, chatId, latestMessagesRef.current);
+      }
     }
   });
   const chatContainer = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const latestMessagesRef = useRef(messages);
 
   if (!isLoaded || !userId) {
     return null
@@ -38,6 +37,7 @@ export default function ChatComponent({firstPrompt, lastMessages, chatId}: { fir
 
   useEffect(() => {
     scroll();
+    latestMessagesRef.current = messages;
   }, [messages]);
 
   const renderResponse = () => {
