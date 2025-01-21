@@ -65,7 +65,14 @@ export default function Home() {
 
       <div className="w-[82%] bg-gray-800 h-screen">
         <div className="w-full h-screen px-6 py-5 flex justify-center items-center">
-        {mode == 'home' ? <NewChatComponent setMode={setMode}/> : mode == 'new chat' ? <ParameterSelector updateObject={updateObject} setData={setData} setMode={setMode} setNewChat={setNewChat}/> : newChat ? <ChatComponent firstPrompt={generatePrompt()} lastMessages={null} chatId={Object.keys(chats).length ? Math.max(...Object.keys(chats).map(Number)) + 1 : 1}/> : <ChatComponent firstPrompt={null} lastMessages={null} chatId={Object.keys(chats).length ? Math.max(...Object.keys(chats).map(Number)) + 1 : 1}/>}
+        {mode == 'home' ? <NewChatComponent setMode={setMode}/> : mode == 'new chat' 
+        ? <ParameterSelector updateObject={updateObject} setData={setData} setMode={setMode} setNewChat={setNewChat}/> 
+        : newChat 
+        ? <ChatComponent firstPrompt={generatePrompt()} lastMessages={null} chatId={Object.keys(chats).length ? Math.max(...Object.keys(chats).map(Number)) + 1 
+          : 1}/> 
+        : <ChatComponent firstPrompt={null} lastMessages={null} chatId={Object.keys(chats).length 
+        ? Math.max(...Object.keys(chats).map(Number)) + 1 
+        : 1}/>}
         </div>
       </div>
     </div>
