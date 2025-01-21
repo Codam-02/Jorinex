@@ -19,5 +19,8 @@ export async function postMessages(user_id: string, chat_id: number, messages: M
         }));
     }
     const records = transformMessagesToRecords(messages);
-    redis.json.set('chats_' + user_id, `$.${chat_id}.messages`, records);
+    const str_chat_id = chat_id.toString();
+    const chats = await redis.json.get('chats_' + user_id);
+    const newEntry = {...(chats ?? {}), [str_chat_id]: {'messages': records, 'chatname': 'chat ' + str_chat_id}};
+    redis.json.set('chats_' + user_id, '$', newEntry);
 };
