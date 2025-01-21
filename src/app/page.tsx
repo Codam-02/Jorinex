@@ -20,18 +20,27 @@ export default function Home() {
   const [data, setData] = useState<DataType>({3:'', 4:''});
   const [mode, setMode] = useState('home');
   const [newChat, setNewChat] = useState(false);
-  const [chats, setChats] = useState<object>({});
+  const [chats, setChats] = useState<any>({});
 
   useEffect(() => {
     const fetchData = async (user_Id: string) => {
       const value = await fetchChats(user_Id);
       return value;
-    }
+    };
     if (userId) {
-      const value = fetchData(userId);
-      setChats(value);
+      fetchData(userId).then((value) => {
+        setChats(value);
+      });
     }
   }, [user]);
+
+  /*
+  useEffect(() => {
+    if (chats) {
+      console.log(chats);
+    }
+  }, [chats]);
+  */
 
   if (!isLoaded || !isSignedIn || !user) {
     return (
@@ -65,13 +74,13 @@ export default function Home() {
 
       <div className="w-[82%] bg-gray-800 h-screen">
         <div className="w-full h-screen px-6 py-5 flex justify-center items-center">
-        {mode == 'home' ? <NewChatComponent setMode={setMode}/> : mode == 'new chat' 
-        ? <ParameterSelector updateObject={updateObject} setData={setData} setMode={setMode} setNewChat={setNewChat}/> 
-        : newChat 
-        ? <ChatComponent firstPrompt={generatePrompt()} lastMessages={null} chatId={Object.keys(chats).length ? Math.max(...Object.keys(chats).map(Number)) + 1 
-          : 1}/> 
-        : <ChatComponent firstPrompt={null} lastMessages={null} chatId={Object.keys(chats).length 
-        ? Math.max(...Object.keys(chats).map(Number)) + 1 
+        {mode == 'home' ? <NewChatComponent setMode={setMode}/> : mode == 'new chat' ?
+         <ParameterSelector updateObject={updateObject} setData={setData} setMode={setMode} setNewChat={setNewChat}/> 
+        : newChat ?
+         <ChatComponent firstPrompt={generatePrompt()} lastMessages={null} chatId={Object.keys(chats).length ? Math.max(...Object.keys(chats).map(Number)) + 1 
+        : 1}/> 
+        : <ChatComponent firstPrompt={null} lastMessages={null} chatId={Object.keys(chats).length ?
+           Math.max(...Object.keys(chats).map(Number)) + 1 
         : 1}/>}
         </div>
       </div>
