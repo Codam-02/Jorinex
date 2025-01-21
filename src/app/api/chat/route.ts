@@ -18,20 +18,21 @@ const ratelimit = new Ratelimit({
 
 export async function POST(req: Request) {
   const { messages, user_id } = await req.json();
-
-  const identifier = user_id;
-  const { success, limit, remaining, pending } = await ratelimit.limit(identifier);
-  const response = {
-    success: success,
-    limit: limit, 
-    remaining: remaining
+  if (user_id != process.env.ADMIN_USER_ID) {
+    const identifier = user_id;
+    const { success, limit, remaining, pending } = await ratelimit.limit(identifier);
+    const response = {
+      success: success,
+      limit: limit, 
+      remaining: remaining
+    }
+  
+    waitUntil(pending);
+      
+    if (!success) {
+      return new Response(JSON.stringify(response), { status: 429 });
+    };
   }
-
-  waitUntil(pending);
-    
-  if (!success) {
-    return new Response(JSON.stringify(response), { status: 429 });
-  };
 
   const result = streamText({
     model: openai('gpt-4o'),
