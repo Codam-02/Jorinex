@@ -20,7 +20,12 @@ export async function postMessages(user_id: string, chat_id: number, messages: M
     }
     const records = transformMessagesToRecords(messages);
     const str_chat_id = chat_id.toString();
-    const chats = await redis.json.get('chats_' + user_id);
-    const newEntry = {...(chats ?? {}), [str_chat_id]: {'messages': records, 'chatname': 'chat ' + str_chat_id}};
-    redis.json.set('chats_' + user_id, '$', newEntry);
+    const chats: object|null= await redis.json.get('chats_' + user_id);
+    if (chats && chats.hasOwnProperty(str_chat_id)) {
+        redis.json.set('chats_' + user_id, '$.' + str_chat_id + '.messages', records);
+    }
+    else {
+        const newEntry = {...(chats ?? {}), [str_chat_id]: {'messages': records, 'chatname': 'chat ' + str_chat_id}};
+        redis.json.set('chats_' + user_id, '$', newEntry);
+    }
 };
