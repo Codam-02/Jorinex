@@ -29,3 +29,13 @@ export async function postMessages(user_id: string, chat_id: number, messages: M
         redis.json.set('chats_' + user_id, '$', newEntry);
     }
 };
+
+export async function editChatName(user_id: string, chat_id: number, newName: string) {
+    const str_chat_id = chat_id.toString();
+    redis.json.set('chats_' + user_id, '$.' + str_chat_id + '.chatname', newName);
+};
+
+export async function deleteChat(user_id: string, chat_id: number) {
+    const str_chat_id = chat_id.toString();
+    redis.json.del('chats_' + user_id, '$.' + str_chat_id);
+};
