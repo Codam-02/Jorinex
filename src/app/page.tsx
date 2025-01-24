@@ -19,7 +19,6 @@ export default function Home() {
   const { userId } = useAuth();
   const [data, setData] = useState<DataType>({3:'', 4:''});
   const [mode, setMode] = useState('home');
-  const [newChat, setNewChat] = useState(false);
   const [chats, setChats] = useState<any>({});
 
   useEffect(() => {
@@ -33,14 +32,6 @@ export default function Home() {
       });
     }
   }, [user]);
-
-  /*
-  useEffect(() => {
-    if (chats) {
-      console.log(chats);
-    }
-  }, [chats]);
-  */
 
   if (!isLoaded || !isSignedIn || !user) {
     return (
@@ -69,19 +60,17 @@ export default function Home() {
   return (
     <div className="flex h-[screen]">
       <div className="w-[18%] h-[screen]">
-      <Sidebar setMode={setMode}/>
+      <Sidebar setMode={setMode} chats={chats}/>
       </div>
 
       <div className="w-[82%] bg-gray-800 h-screen">
         <div className="w-full h-screen px-6 py-5 flex justify-center items-center">
         {mode == 'home' ? <NewChatComponent setMode={setMode}/> : mode == 'new chat' ?
-         <ParameterSelector updateObject={updateObject} setData={setData} setMode={setMode} setNewChat={setNewChat}/> 
-        : newChat ?
-         <ChatComponent firstPrompt={generatePrompt()} lastMessages={null} chatId={Object.keys(chats).length ? Math.max(...Object.keys(chats).map(Number)) + 1 
-        : 1}/> 
+         <ParameterSelector updateObject={updateObject} setData={setData} setMode={setMode}/> 
+        : mode == 'chat' ?
+         <ChatComponent firstPrompt={generatePrompt()} lastMessages={null} chatId={Object.keys(chats).length ? Math.max(...Object.keys(chats).map(Number)) + 1 : 1}/> 
         : <ChatComponent firstPrompt={null} lastMessages={null} chatId={Object.keys(chats).length ?
-           Math.max(...Object.keys(chats).map(Number)) + 1 
-        : 1}/>}
+           Math.max(...Object.keys(chats).map(Number)) + 1 : 1}/>}
         </div>
       </div>
     </div>

@@ -5,14 +5,13 @@ import HamburgerMenu from "./HamburgerMenu";
 import ProgressBar from "./ProgressBar";
 import InputGroup from "./InputGroup";
 
-export default function ParameterSelector({updateObject, setData, setMode, setNewChat}: any) {
+export default function ParameterSelector({updateObject, setData, setMode}: any) {
 
   const stages = ['Type', 'Topic', 'Formality', 'Info']
   const [selectedStage, setSelectedStage] = useState(0);
 
   useEffect(() => {
     setData({3:'', 4:''});
-    setNewChat(true);
   }, []);
   
   const handleClickNext = () => {
