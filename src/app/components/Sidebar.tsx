@@ -1,6 +1,32 @@
 'use client'
 
+import { Message } from "ai/react";
+
 export default function Sidebar({setMode} : any) {
+
+    function recordsToMessages(records: Record<string, unknown>[]): Message[] {
+        return records
+          .map((record) => {
+            const id = typeof record.id === 'string' ? record.id : undefined;
+            const content = typeof record.content === 'string' ? record.content : undefined;
+            const role = ['system', 'user', 'assistant', 'data'].includes(record.role as string)
+              ? (record.role as Message['role'])
+              : undefined;
+      
+            if (!id || !content || !role) {
+              console.warn(`Invalid record skipped: ${JSON.stringify(record)}`);
+              return null;
+            }
+      
+            return {
+              id,
+              content,
+              role,
+            } as Message;
+          })
+          .filter((message): message is Message => message !== null);
+    }
+
     return (
     <div className="flex h-screen flex-col justify-between border-e bg-gray-900">
         <div className="px-4 py-6 h-full">
