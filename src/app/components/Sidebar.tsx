@@ -2,7 +2,7 @@
 
 import { Message } from "ai/react";
 
-export default function Sidebar({setMode} : any) {
+export default function Sidebar({setMode, chats} : any) {
 
     function recordsToMessages(records: Record<string, unknown>[]): Message[] {
         return records
@@ -29,12 +29,28 @@ export default function Sidebar({setMode} : any) {
 
     return (
     <div className="flex h-screen flex-col justify-between border-e bg-gray-900">
-        <div className="px-4 py-6 h-full">
+        <div className="h-[70%]">
+        <div className="px-4 py-6 h-fit">
             <span className="grid h-10 w-32 place-content-center rounded-lg bg-gray-100 text-xs text-gray-600">
                 Logo
             </span>
         </div>
-        <div className="h-fit m-4 flex flex-col justify-end pb-1">
+        <div className="mx-4 my-2">
+            <ul className="space-y-2">
+                {Object.keys(chats).map((key) => (
+                    <li key={key}>
+                    <a
+                    //onClick={() => handleOptionClick(index)}
+                    className={"min-w-[170px] bg-gray-800 block rounded-xl px-4 py-2 text-sm text-gray-300 hover:bg-gray-100 hover:text-gray-800 font-textfont"}
+                    >
+                    {chats[key].chatname}
+                    </a>
+                    </li>
+                ))}
+            </ul>
+        </div>
+        </div>
+        <div className="h-fit mx-4 my-2 flex flex-col justify-end pb-1">
             <div className="bg-gray-600 rounded-lg">
                 <p className="break-words text-gray-200 rounded-xl text-center p-2 font-fancyfont">Please send any feedback, request or question you have.</p>
                 <div className="flex flex-row justify-center p-2">
