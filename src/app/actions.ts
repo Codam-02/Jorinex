@@ -39,3 +39,7 @@ export async function deleteChat(user_id: string, chat_id: number) {
     const str_chat_id = chat_id.toString();
     redis.json.del('chats_' + user_id, '$.' + str_chat_id);
 };
+
+export async function deleteChats(user_id: string) {
+    redis.json.del('chats_' + user_id, '$');
+};
