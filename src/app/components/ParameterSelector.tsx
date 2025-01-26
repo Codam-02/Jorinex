@@ -5,7 +5,7 @@ import HamburgerMenu from "./HamburgerMenu";
 import ProgressBar from "./ProgressBar";
 import InputGroup from "./InputGroup";
 
-export default function ParameterSelector({updateObject, setData, setMode}: any) {
+export default function ParameterSelector({updateObject, setData, setMode, setNewChat, setSelectedChat, chats}: any) {
 
   const stages = ['Type', 'Topic', 'Formality', 'Info']
   const [selectedStage, setSelectedStage] = useState(0);
@@ -74,7 +74,7 @@ export default function ParameterSelector({updateObject, setData, setMode}: any)
     <div className="bg-gray-950 p-5 rounded-lg h-fit flex flex-col justify-center items-center gap-14 w-[450px]">
       <h2 className="text-gray-400 text-xl text-center font-fancyfont">A new message with the submitted parameters will be generated</h2>
       <div className="flex flex-col justify-center items-center gap-4">
-      <button onClick={()=>setMode('chat')} className="bg-blue-800 block rounded-lg px-4 py-2 text-base text-gray-200 hover:bg-gray-100 hover:text-gray-700 text-center font-fancyfont">Generate</button>
+      <button onClick={()=>{setSelectedChat(chats ? Math.max(...Object.keys(chats).map(Number)) + 1 : 1);setMode('chat');setNewChat(true)}} className="bg-blue-800 block rounded-lg px-4 py-2 text-base text-gray-200 hover:bg-gray-100 hover:text-gray-700 text-center font-fancyfont">Generate</button>
       <button onClick={()=>setSelectedStage(stages.length - 1)} className="bg-gray-800 block rounded-lg px-4 py-2 text-base text-gray-400 hover:bg-gray-100 hover:text-gray-700 text-center font-fancyfont">Back</button>
       </div>    
     </div>

@@ -1,31 +1,6 @@
 'use client'
 
-import { Message } from "ai/react";
-
-export default function Sidebar({setMode, chats} : any) {
-
-    function recordsToMessages(records: Record<string, unknown>[]): Message[] {
-        return records
-          .map((record) => {
-            const id = typeof record.id === 'string' ? record.id : undefined;
-            const content = typeof record.content === 'string' ? record.content : undefined;
-            const role = ['system', 'user', 'assistant', 'data'].includes(record.role as string)
-              ? (record.role as Message['role'])
-              : undefined;
-      
-            if (!id || !content || !role) {
-              console.warn(`Invalid record skipped: ${JSON.stringify(record)}`);
-              return null;
-            }
-      
-            return {
-              id,
-              content,
-              role,
-            } as Message;
-          })
-          .filter((message): message is Message => message !== null);
-    }
+export default function Sidebar({setMode, chats, setSelectedChat, setNewChat} : any) {
 
     return (
     <div className="flex h-screen flex-col justify-between border-e bg-gray-900">
@@ -37,16 +12,23 @@ export default function Sidebar({setMode, chats} : any) {
         </div>
         <div className="mx-4 my-2">
             <ul className="space-y-2">
-                {Object.keys(chats).map((key) => (
-                    <li key={key}>
+            {chats ? Object.keys(chats).map((key) => (
+                <li key={key}>
                     <a
-                    //onClick={() => handleOptionClick(index)}
-                    className={"min-w-[170px] bg-gray-800 block rounded-xl px-4 py-2 text-sm text-gray-300 hover:bg-gray-100 hover:text-gray-800 font-textfont"}
+                    onClick={() => {
+                        setMode('home');
+                        setSelectedChat(key);
+                        setNewChat(false);
+                        setMode('chat');
+                    }}
+                    className={
+                        "w-full bg-gray-800 block rounded-xl px-4 py-2 text-sm text-gray-300 hover:bg-gray-100 hover:text-gray-800 font-textfont"
+                    }
                     >
                     {chats[key].chatname}
                     </a>
-                    </li>
-                ))}
+                </li>
+                )) : null}
             </ul>
         </div>
         </div>

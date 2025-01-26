@@ -5,7 +5,7 @@ import ChatComponent from "./components/ChatComponent";
 import NewChatComponent from "./components/NewChatComponent";
 import ParameterSelector from "./components/ParameterSelector";
 import Sidebar from "./components/Sidebar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SignIn, useUser, useAuth } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
 import { fetchChats } from "./actions";
@@ -20,6 +20,9 @@ export default function Home() {
   const [data, setData] = useState<DataType>({3:'', 4:''});
   const [mode, setMode] = useState('home');
   const [chats, setChats] = useState<any>({});
+  const [selectedChat, setSelectedChat] = useState<number>(0);
+  const [fetchTrigger, setFetchTrigger] = useState<boolean>(false);
+  const [newChat, setNewChat] = useState<boolean>();
 
   useEffect(() => {
     const fetchData = async (user_Id: string) => {
@@ -31,7 +34,11 @@ export default function Home() {
         setChats(value);
       });
     }
-  }, [user]);
+  }, [user, fetchTrigger]);
+
+  useEffect(() => {
+    console.log(selectedChat);
+  }, [selectedChat]);
 
   if (!isLoaded || !isSignedIn || !user) {
     return (
@@ -60,17 +67,15 @@ export default function Home() {
   return (
     <div className="flex h-[screen]">
       <div className="w-[18%] h-[screen]">
-      <Sidebar setMode={setMode} chats={chats}/>
+      <Sidebar setMode={setMode} chats={chats} setSelectedChat={setSelectedChat} newChat={newChat} setNewChat={setNewChat}/>
       </div>
 
       <div className="w-[82%] bg-gray-800 h-screen">
-        <div className="w-full h-screen px-6 py-5 flex justify-center items-center">
-        {mode == 'home' ? <NewChatComponent setMode={setMode}/> : mode == 'new chat' ?
-         <ParameterSelector updateObject={updateObject} setData={setData} setMode={setMode}/> 
-        : mode == 'chat' ?
-         <ChatComponent firstPrompt={generatePrompt()} lastMessages={null} chatId={Object.keys(chats).length ? Math.max(...Object.keys(chats).map(Number)) + 1 : 1}/> 
-        : <ChatComponent firstPrompt={null} lastMessages={null} chatId={Object.keys(chats).length ?
-           Math.max(...Object.keys(chats).map(Number)) + 1 : 1}/>}
+        <div className="w-full h-screen px-6 py-5 flex justify-center items-center" key={`chatdiv-${selectedChat}`}>
+        {mode === 'home' ? <NewChatComponent setMode={setMode}/> : mode === 'new chat' ?
+         <ParameterSelector updateObject={updateObject} setData={setData} setMode={setMode} setNewChat={setNewChat} setSelectedChat={setSelectedChat} chats={chats}/> 
+        :
+         <ChatComponent firstPrompt={newChat ? generatePrompt() : null} chats={chats} chatId={selectedChat} fetchTrigger={fetchTrigger} setFetchTrigger={setFetchTrigger}/>}
         </div>
       </div>
     </div>
