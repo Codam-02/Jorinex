@@ -7,6 +7,8 @@ import { postMessages } from '../actions';
 
 export default function ChatComponent({firstPrompt, chats, chatId, fetchTrigger, setFetchTrigger}: { firstPrompt: string | null; chats: any; chatId: number; fetchTrigger: boolean; setFetchTrigger: Function}) {
   const { isLoaded, userId } = useAuth();
+  const [showError, setShowError] = useState<boolean>(false);
+  const [errorTriggered, setErrorTriggered] = useState<boolean>(false);
 
   const onFinishChat = () => {
     if (userId) {
@@ -23,6 +25,13 @@ export default function ChatComponent({firstPrompt, chats, chatId, fetchTrigger,
       onFinish: () => {
         if (userId) {
           onFinishChat();
+        }
+      },
+      onError: (error: any) => {
+        const errorData = JSON.parse(error.message);
+        if (errorData.remaining !== undefined && errorData.remaining == 0) {
+          setShowError(true);
+          setErrorTriggered(true);
         }
       },
     };
@@ -109,6 +118,16 @@ export default function ChatComponent({firstPrompt, chats, chatId, fetchTrigger,
   return (
     <div className='w-full h-full bg-gray-900 rounded-lg p-6 relative flex flex-col justify-between' key={chatKey}>
       {renderResponse()}
+      {showError ?
+      <div className='bg-red-400 p-1'>
+      <div className='flex flex-row justify-end items-end px-1'><button className='text-gray-200' onClick={() => {setShowError(false)}}>{String.fromCharCode(10006)}</button></div>
+      <div className='text-gray-200 font-fancyfont p-3'>
+      You’ve interacted with/created chats 3 times in the last 24 hours, which is the maximum allowed.
+      Don’t worry, you’ll be able to use it again once your limit resets.
+      For an increase in usage, contact us.
+      </div>
+      </div>
+      :
       <form 
         ref={formRef} 
         onSubmit={event => {
@@ -124,10 +143,10 @@ export default function ChatComponent({firstPrompt, chats, chatId, fetchTrigger,
           value={messages.length > 0 ? input : ''}
           placeholder="Send a message..."
           onChange={handleInputChange}
-          disabled={isLoading}
+          disabled={isLoading || errorTriggered}
           className='w-[100%] rounded-xl h-[100%] px-2'
         />
-      </form>
+      </form>}
     </div>
   );
 }
