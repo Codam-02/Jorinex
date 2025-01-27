@@ -1,14 +1,20 @@
 'use client'
 
+import Image from "next/image";
+
 export default function Sidebar({setMode, chats, setSelectedChat, setNewChat} : any) {
 
     return (
     <div className="flex h-screen flex-col justify-between border-e bg-gray-900">
         <div className="h-[70%]">
-        <div className="px-4 py-6 h-fit">
-            <span className="grid h-10 w-32 place-content-center rounded-lg bg-gray-100 text-xs text-gray-600">
-                Logo
-            </span>
+        <div className="px-4 py-3 h-fit">
+            <Image
+            src="/logo.svg"
+            alt="logo"
+            width={45}
+            height={45}
+            style={{ cursor: "pointer" }}>
+            </Image>
         </div>
         <div className="mx-4 my-2">
         <div
@@ -44,8 +50,18 @@ export default function Sidebar({setMode, chats, setSelectedChat, setNewChat} : 
         <div className="h-fit mx-4 my-2 flex flex-col justify-end pb-1">
             <div className="bg-gray-600 rounded-lg">
                 <p className="break-words text-gray-200 rounded-xl text-center p-2 font-fancyfont">Please send any feedback, request or question you have.</p>
-                <div className="flex flex-row justify-center p-2">
-                    <a href="mailto:coccia.damianoj@gmail.com" className="bg-blue-700 hover:bg-gray-300 rounded-lg text-2xl px-5 py-1 text-gray-300 hover:text-blue-700">{String.fromCharCode(0x2709)}</a>
+                <div className="flex flex-row justify-center items-center h-[50px] p-[1px] space-x-5 mb-3">
+                    <Image
+                    onClick={() => {
+                        window.open("https://www.linkedin.com/in/damiano-jack-coccia-5b0609264/", "_blank", "noopener,noreferrer");
+                    }}
+                    src="/linkedinLogo.svg"
+                    alt="linkedin"
+                    width={50}
+                    height={50}
+                    style={{ cursor: "pointer" }}
+                    />
+                    <a href="mailto:coccia.damianoj@gmail.com" className="bg-blue-700 hover:bg-gray-300 rounded-lg text-2xl h-fit w-fit py-1 px-2 text-gray-300 hover:text-blue-700">{String.fromCharCode(0x2709)}</a>
                 </div>
             </div>
         </div>
