@@ -12,8 +12,13 @@ export default function ChatComponent({firstPrompt, chats, chatId, fetchTrigger,
 
   const onFinishChat = () => {
     if (userId) {
-      postMessages(userId, chatId, latestMessagesRef.current).then(
-      setFetchTrigger(!fetchTrigger));
+      postMessages(userId, chatId, latestMessagesRef.current)
+      .then(() => {
+        return new Promise((resolve) => setTimeout(resolve, 1000));
+      })
+      .then(() => {
+        setFetchTrigger(!fetchTrigger);
+      });
     }
   }
 
@@ -119,7 +124,7 @@ export default function ChatComponent({firstPrompt, chats, chatId, fetchTrigger,
     <div className='w-full h-full bg-gray-900 rounded-lg p-6 relative flex flex-col justify-between' key={chatKey}>
       {renderResponse()}
       {showError ?
-      <div className='bg-red-400 p-1'>
+      <div className='bg-red-500 rounded-md p-1'>
       <div className='flex flex-row justify-end items-end px-1'><button className='text-gray-200' onClick={() => {setShowError(false)}}>{String.fromCharCode(10006)}</button></div>
       <div className='text-gray-200 font-fancyfont p-3'>
       You’ve interacted with/created chats 3 times in the last 24 hours, which is the maximum allowed.
