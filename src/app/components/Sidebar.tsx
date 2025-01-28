@@ -9,6 +9,9 @@ export default function Sidebar({setMode, chats, setSelectedChat, setNewChat} : 
         <div className="h-[70%]">
         <div className="px-4 py-3 h-fit">
             <Image
+            onClick={() => {
+                window.location.href = 'https://jorinex.vercel.app/'
+            }}
             src="/logo.svg"
             alt="logo"
             width={45}
