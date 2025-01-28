@@ -1,11 +1,10 @@
 'use client'
 
-import Image from "next/image";
 import ChatComponent from "./components/ChatComponent";
 import NewChatComponent from "./components/NewChatComponent";
 import ParameterSelector from "./components/ParameterSelector";
 import Sidebar from "./components/Sidebar";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { SignIn, useUser, useAuth } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
 import { fetchChats } from "./actions";
@@ -35,10 +34,6 @@ export default function Home() {
       });
     }
   }, [user, fetchTrigger]);
-
-  useEffect(() => {
-    console.log(selectedChat);
-  }, [selectedChat]);
 
   if (!isLoaded || !isSignedIn || !user) {
     return (

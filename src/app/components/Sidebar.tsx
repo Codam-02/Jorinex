@@ -16,22 +16,23 @@ export default function Sidebar({setMode, chats, setSelectedChat, setNewChat} : 
             style={{ cursor: "pointer" }}>
             </Image>
         </div>
-        <div className="mx-4 my-2">
+        <div className="mx-4 my-2 h-full">
         <div
         onClick={() => {
             setMode('new chat');
+            setNewChat(true);
         }}
         className="w-[70%] bg-gray-600 block rounded-md px-4 py-1 text-sm text-gray-100 hover:bg-gray-200 hover:text-gray-600 font-textfont mb-3 font-semibold flex justify-between items-center"
         >
             New chat
             <div className="bg-gray-300 border-solid border-2 border-gray-700 px-2 py-1 rounded-xl text-gray-600 text-md font-sans">{String.fromCharCode(0x271A)}</div>
         </div>
+        <div className="h-[65%] overflow-y-auto scrollbar-thin pr-2">
             <ul className="space-y-2">
             {chats ? Object.keys(chats).map((key) => (
                 <li key={key}>
                     <a
                     onClick={() => {
-                        setMode('home');
                         setSelectedChat(key);
                         setNewChat(false);
                         setMode('chat');
@@ -45,6 +46,7 @@ export default function Sidebar({setMode, chats, setSelectedChat, setNewChat} : 
                 </li>
                 )) : null}
             </ul>
+        </div>
         </div>
         </div>
         <div className="h-fit mx-4 my-2 flex flex-col justify-end pb-1">
