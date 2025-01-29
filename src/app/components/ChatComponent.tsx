@@ -5,20 +5,22 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '@clerk/nextjs'
 import { postMessages } from '../actions';
 
-export default function ChatComponent({firstPrompt, chats, chatId, fetchTrigger, setFetchTrigger}: { firstPrompt: string | null; chats: any; chatId: number; fetchTrigger: boolean; setFetchTrigger: Function}) {
+export default function ChatComponent({firstPrompt, chats, chatId, fetchTrigger, setFetchTrigger, buttonsDisabled, setButtonsDisabled}: { firstPrompt: string | null; chats: any; chatId: number; fetchTrigger: boolean; setFetchTrigger: Function; buttonsDisabled: boolean; setButtonsDisabled: Function}) {
   const { isLoaded, userId } = useAuth();
   const [showError, setShowError] = useState<boolean>(false);
   const [errorTriggered, setErrorTriggered] = useState<boolean>(false);
 
   const onFinishChat = () => {
     if (userId) {
-      postMessages(userId, chatId, latestMessagesRef.current)
-      .then(() => {
-        return new Promise((resolve) => setTimeout(resolve, 1000));
-      })
-      .then(() => {
-        setFetchTrigger(!fetchTrigger);
-      });
+        postMessages(userId, chatId, latestMessagesRef.current)
+        .then(() => {
+          return new Promise((resolve) => setTimeout(resolve, 1000));
+        })
+        .then(() => {
+          setFetchTrigger(!fetchTrigger);
+        }).then(() => {
+          setButtonsDisabled(false);
+        });
     }
   }
 
@@ -33,6 +35,7 @@ export default function ChatComponent({firstPrompt, chats, chatId, fetchTrigger,
         }
       },
       onError: (error: any) => {
+        setButtonsDisabled(false);
         const errorData = JSON.parse(error.message);
         if (errorData.remaining !== undefined && errorData.remaining == 0) {
           setShowError(true);
@@ -136,6 +139,7 @@ export default function ChatComponent({firstPrompt, chats, chatId, fetchTrigger,
       <form 
         ref={formRef} 
         onSubmit={event => {
+          setButtonsDisabled(true);
           handleSubmit(event, {
             body: {
               user_id: userId,
@@ -148,7 +152,7 @@ export default function ChatComponent({firstPrompt, chats, chatId, fetchTrigger,
           value={messages.length > 0 ? input : ''}
           placeholder="Send a message..."
           onChange={handleInputChange}
-          disabled={isLoading || errorTriggered}
+          disabled={isLoading || errorTriggered || buttonsDisabled}
           className='w-[100%] rounded-xl h-[100%] px-2'
         />
       </form>}

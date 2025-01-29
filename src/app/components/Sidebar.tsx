@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-export default function Sidebar({setMode, chats, setSelectedChat, setNewChat} : any) {
+export default function Sidebar({setMode, chats, setSelectedChat, setNewChat, buttonsDisabled, setButtonsDisabled} : any) {
 
     return (
     <div className="flex h-screen flex-col justify-between border-e bg-gray-900">
@@ -36,9 +36,11 @@ export default function Sidebar({setMode, chats, setSelectedChat, setNewChat} : 
                 <li key={key}>
                     <a
                     onClick={() => {
-                        setSelectedChat(key);
-                        setNewChat(false);
-                        setMode('chat');
+                        if (!buttonsDisabled) {
+                            setSelectedChat(key);
+                            setNewChat(false);
+                            setMode('chat');
+                        }
                     }}
                     className={
                         "w-full bg-gray-800 block rounded-xl px-4 py-2 text-sm text-gray-300 hover:bg-gray-100 hover:text-gray-800 font-textfont"

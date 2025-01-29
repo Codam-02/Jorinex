@@ -22,6 +22,7 @@ export default function Home() {
   const [selectedChat, setSelectedChat] = useState<number>(0);
   const [fetchTrigger, setFetchTrigger] = useState<boolean>(false);
   const [newChat, setNewChat] = useState<boolean>();
+  const [buttonsDisabled, setButtonsDisabled] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async (user_Id: string) => {
@@ -62,7 +63,7 @@ export default function Home() {
   return (
     <div className="flex h-[screen]">
       <div className="w-[18%] h-[screen]">
-      <Sidebar setMode={setMode} chats={chats} setSelectedChat={setSelectedChat} newChat={newChat} setNewChat={setNewChat}/>
+      <Sidebar setMode={setMode} chats={chats} setSelectedChat={setSelectedChat} newChat={newChat} setNewChat={setNewChat} buttonsDisabled={buttonsDisabled} setButtonsDisabled={setButtonsDisabled}/>
       </div>
 
       <div className="w-[82%] bg-gray-800 h-screen">
@@ -70,7 +71,7 @@ export default function Home() {
         {mode === 'home' ? <NewChatComponent setMode={setMode}/> : mode === 'new chat' ?
          <ParameterSelector updateObject={updateObject} setData={setData} setMode={setMode} setNewChat={setNewChat} setSelectedChat={setSelectedChat} chats={chats}/> 
         :
-         <ChatComponent firstPrompt={newChat ? generatePrompt() : null} chats={chats} chatId={selectedChat} fetchTrigger={fetchTrigger} setFetchTrigger={setFetchTrigger}/>}
+         <ChatComponent firstPrompt={newChat ? generatePrompt() : null} chats={chats} chatId={selectedChat} fetchTrigger={fetchTrigger} setFetchTrigger={setFetchTrigger} buttonsDisabled={buttonsDisabled} setButtonsDisabled={setButtonsDisabled}/>}
         </div>
       </div>
     </div>
