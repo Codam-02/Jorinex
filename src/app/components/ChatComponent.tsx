@@ -14,7 +14,7 @@ export default function ChatComponent({firstPrompt, chats, chatId, fetchTrigger,
     if (userId) {
         postMessages(userId, chatId, latestMessagesRef.current)
         .then(() => {
-          return new Promise((resolve) => setTimeout(resolve, 1000));
+          return new Promise((resolve) => setTimeout(resolve, 1500));
         })
         .then(() => {
           setFetchTrigger(!fetchTrigger);
